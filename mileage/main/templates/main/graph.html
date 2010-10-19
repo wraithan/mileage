@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Highcharts Example</title>
+    
+    
+    <!-- 1. Add these JavaScript inclusions in the head of your page -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/highcharts.js"></script>
+    
+    
+    <!-- 1a) Optional: the exporting module -->
+    <script type="text/javascript" src="../js/modules/exporting.js"></script>
+    
+    
+    <!-- 2. Add the JavaScript to initialize the chart on document ready -->
+    <script type="text/javascript">
+      
+var chart;
+$(document).ready(function() {
+    chart = new Highcharts.Chart({
+	chart: {
+	    renderTo: 'container',
+	    defaultSeriesType: 'line',
+	    marginRight: 130,
+	    marginBottom: 25
+	},
+	title: {
+	    text: 'Miles Per Day',
+	    x: -20 //center
+	},
+	subtitle: {
+	    text: 'updated each night',
+	    x: -20
+	},
+	xAxis: {
+	    categories: [{% for trip in trips %}"{{ trip.when }}"{% if not forloop.last %},{% endif %}{% endfor %}]
+	},
+	yAxis: {
+	    title: {
+		text: 'Miles'
+	    },
+	    plotLines: [{
+		value: 0,
+		width: 1,
+		color: '#808080'
+	    }]
+	},
+	tooltip: {
+	    formatter: function() {
+		return '<b>'+ this.series.name +'</b><br/>'+
+		    this.x +': '+ this.y +' miles';
+	    }
+	},
+	legend: {
+	    layout: 'vertical',
+	    align: 'right',
+	    verticalAlign: 'top',
+	    x: -10,
+	    y: 100,
+	    borderWidth: 0
+	},
+	series: [{
+	    name: 'Chris',
+	    data: [{% for trip in trips %}{{ trip.miles__sum }}{% if not forloop.last %},{% endif %}{% endfor %}]
+	}]
+    });
+    
+				
+});
+
+    </script>
+    
+  </head>
+  <body>
+    
+    <!-- 3. Add the container -->
+    <div id="container" style="width: 800px; height: 400px; margin: 0 auto"></div>
+
+    
+    
+  </body>
+</html>
